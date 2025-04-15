@@ -165,56 +165,46 @@ pip install -r requirements.txt
 
 ---
 
-## **Troubleshooting**
+1. Based on Vector Store Backend
+These are different storage engines with their own performance & features:
 
-### **1. FAISS Database Issues**
-- If the FAISS database is corrupted or missing, delete the `faiss_db_dit` directory and recreate it using `vb.py`.
 
-### **2. Ollama Server Not Running**
-- Ensure the Ollama server is running locally:
-  ```bash
-  ollama serve
-  ```
+Tool	Description	Strengths
+FAISS	Facebook AI Similarity Search (local, fast)	Great for small to medium projects
+ChromaDB	Lightweight and modern vector DB (local or server)	Native LangChain integration
+Weaviate	Cloud-native, supports hybrid (keyword + vector)	Scalable with filtering
+Pinecone	Fully managed cloud service	Fast, scalable, filters
+Qdrant	Rust-based, high performance	Good filtering and payload storage
+Milvus	Distributed vector database	Industrial scale and speed
+2. Based on Text Chunking Strategy
 
-### **3. Missing Dependencies**
-- Install missing dependencies using:
-  ```bash
-  pip install -r requirements.txt
-  ```
+Method	Description	Used in
+RecursiveCharacterTextSplitter	Breaks on logical text boundaries	LangChain default
+TokenTextSplitter	Splits by tokens (good for LLMs)	When using token-limited LLMs
+SentenceSplitter	Keeps sentence boundaries intact	Good for semantic meaning
+SlidingWindow	Overlapping chunks	For context continuity
+3. Based on Embedding Models
 
----
+Source	Model	Notes
+OpenAI	text-embedding-ada-002	Powerful, cloud-based
+HuggingFace	all-MiniLM, bge-small-en, etc.	Local, free
+Ollama	mistral, llama2, etc.	Fast local inference
+Cohere	embed-english-light	SaaS, multilingual
+SentenceTransformers	Pretrained on semantic similarity	Good for retrieval tasks
+4. Based on Indexing Strategy
 
-## **Future Enhancements**
-- Add support for remote hosting of the LLM server.
-- Implement user authentication for secure access.
-- Expand the chatbot's knowledge base with additional datasets.
+Technique	Description
+Flat Index	Linear search over all vectors (FAISS default)
+IVF (Inverted File Index)	Faster approximate search, good for large datasets
+HNSW (Hierarchical Navigable Small World)	Graph-based, used in Qdrant, Weaviate
+ScaNN / Annoy	Optimized for fast retrieval in large corpora
+5. Based on Metadata Storage
+You can attach metadata to each chunk like:
 
----
+Source document
 
-## **License**
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+Section title
 
----
+Tags (e.g. “Events”, “Hostel”, etc.)
 
-## **Acknowledgments**
-- **LangChain**: For providing tools to build the RAG pipeline.
-- **Ollama**: For the local LLM support.
-- **FAISS**: For efficient vector search capabilities.
-```
-
----
-
-### **How to Use This README.md**
-1. Save the content in a file named README.md in your project directory:
-   ```bash
-   /Users/shyjojose/Desktop/campus_guide/README.md
-   ```
-
-2. Push it to your GitHub repository:
-   ```bash
-   git add README.md
-   git commit -m "Add project documentation"
-   git push
-   ```
-
-Let me know if you need further assistance!
+This allows filtering during retrieval (.with_filters() in LangChain).
