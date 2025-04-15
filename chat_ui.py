@@ -9,7 +9,7 @@ rag_chain = load_rag_chain()
 
 # Initialize session state for chat history
 if "messages" not in st.session_state:
-    st.session_state.messages = []  # Each message is a dict: {"role": "user"/"assistant", "content": "..."}
+    st.session_state.messages = []  
 
 # Display chat history
 for msg in st.session_state.messages:
