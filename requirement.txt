@@ -1,0 +1,9 @@
+streamlit
+langchain
+langchain-ollama
+langchain-community
+faiss-cpu
+scikit-learn
+umap-learn
+plotly
+matplotlib
